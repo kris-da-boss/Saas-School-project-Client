@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "../pages/public/LoginPage";
 import UnauthorizedPage from "../pages/public/UnauthorizedPage";
 import AdminDashboardPage from "../pages/admin/AdminDashboardPage";
+import ManageStudentsPage from "../pages/admin/ManageStudentsPage";
 import TeacherDashboardPage from "../pages/teacher/TeacherDashboardPage";
 import StudentDashboardPage from "../pages/student/StudentDashboardPage";
 import ParentDashboardPage from "../pages/parent/ParentDashboardPage";
@@ -20,6 +21,16 @@ export default function AppRoutes() {
           <ProtectedRoute>
             <RoleRoute allow={["admin"]}>
               <AdminDashboardPage />
+            </RoleRoute>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/students"
+        element={
+          <ProtectedRoute>
+            <RoleRoute allow={["admin"]}>
+              <ManageStudentsPage />
             </RoleRoute>
           </ProtectedRoute>
         }
