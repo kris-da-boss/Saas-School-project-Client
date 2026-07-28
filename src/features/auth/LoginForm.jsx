@@ -24,7 +24,17 @@ export default function LoginForm() {
       const user = await login(form);
       navigate(`/${user.role}`);
     } catch (err) {
-      setError(err.response?.data?.message || "Unable to sign in");
+      if (err.response) {
+        // Request reached the backend and got a real error back
+        setError(`Server said: ${err.response.status} - ${err.response.data?.message || "Unknown error"}`);
+      } else if (err.request) {
+        // Request never got a response at all - CORS block, wrong URL, or backend down
+        setError(
+          `No response from server. Check: is VITE_API_URL set to "${import.meta.env.VITE_API_URL}"? Is that reachable?`
+        );
+      } else {
+        setError(`Unexpected error: ${err.message}`);
+      }
     } finally {
       setSubmitting(false);
     }
