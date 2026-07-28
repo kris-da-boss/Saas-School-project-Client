@@ -1,8 +1,11 @@
 import axios from "axios";
 
-// All backend calls go through this instance. Import it, never raw axios.
+// Requests now go through Vercel's own domain, which proxies /api/* to the
+// Render backend (see vercel.json). This makes the frontend and API
+// same-origin from the browser's point of view, so the refresh cookie is
+// first-party — no more Safari/mobile third-party cookie blocking.
 const axiosClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL, // e.g. https://your-render-url.onrender.com/api/v1
+  baseURL: "/api/v1",
   withCredentials: true, // sends the httpOnly refreshToken cookie automatically
 });
 
