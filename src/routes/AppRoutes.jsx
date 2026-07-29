@@ -3,6 +3,7 @@ import LoginPage from "../pages/public/LoginPage";
 import UnauthorizedPage from "../pages/public/UnauthorizedPage";
 import AdminDashboardPage from "../pages/admin/AdminDashboardPage";
 import ManageStudentsPage from "../pages/admin/ManageStudentsPage";
+import ManageTeachersPage from "../pages/admin/ManageTeachersPage";
 import TeacherDashboardPage from "../pages/teacher/TeacherDashboardPage";
 import StudentDashboardPage from "../pages/student/StudentDashboardPage";
 import ParentDashboardPage from "../pages/parent/ParentDashboardPage";
@@ -31,6 +32,16 @@ export default function AppRoutes() {
           <ProtectedRoute>
             <RoleRoute allow={["admin"]}>
               <ManageStudentsPage />
+            </RoleRoute>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/teachers"
+        element={
+          <ProtectedRoute>
+            <RoleRoute allow={["admin"]}>
+              <ManageTeachersPage />
             </RoleRoute>
           </ProtectedRoute>
         }

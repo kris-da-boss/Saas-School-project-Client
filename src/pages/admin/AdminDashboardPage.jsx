@@ -11,6 +11,9 @@ export default function AdminDashboardPage() {
       <Link to="/admin/students" className="mt-6 block text-sm underline text-ink">
         Manage students
       </Link>
+      <Link to="/admin/teachers" className="mt-2 block text-sm underline text-ink">
+        Manage teachers
+      </Link>
       <button onClick={logout} className="mt-4 text-sm underline text-charcoal/70">
         Sign out
       </button>
