@@ -1,25 +1,16 @@
 import { useAuth } from "../../hooks/useAuth";
-import { Link } from "react-router-dom";
 
 export default function AdminDashboardPage() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
 
   return (
-    <div className="p-8">
-      <p className="text-xs uppercase tracking-[0.2em] text-brass">Admin</p>
-      <h1 className="font-display text-2xl text-ink">Welcome, {user?.fullName}</h1>
-      <Link to="/admin/students" className="mt-6 block text-sm underline text-ink">
-        Manage students
-      </Link>
-      <Link to="/admin/teachers" className="mt-2 block text-sm underline text-ink">
-        Manage teachers
-      </Link>
-      <Link to="/admin/parents" className="mt-2 block text-sm underline text-ink">
-        Manage parents
-      </Link>
-      <button onClick={logout} className="mt-4 text-sm underline text-charcoal/70">
-        Sign out
-      </button>
+    <div className="p-10">
+      <p className="text-xs uppercase tracking-[0.2em] text-brass">Overview</p>
+      <h1 className="mt-1 font-display text-3xl text-ink">Welcome back, {user?.fullName}</h1>
+      <p className="mt-2 max-w-md text-sm text-charcoal/60">
+        Use the sidebar to manage students, teachers, and parents. Attendance, results, and fee
+        collection will appear here as those features are built.
+      </p>
     </div>
   );
 }

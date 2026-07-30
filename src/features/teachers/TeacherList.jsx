@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { getTeachers, deactivateTeacher } from "../../api/teacher.api";
 import SearchBar from "../../components/shared/SearchBar";
 import Pagination from "../../components/shared/Pagination";
+import Button from "../../components/ui/Button";
 import { usePagination } from "../../hooks/usePagination";
 
 export default function TeacherList({ onEdit, refreshKey }) {
@@ -47,35 +48,39 @@ export default function TeacherList({ onEdit, refreshKey }) {
       ) : (
         <div className="divide-y divide-rule border-y border-rule">
           {teachers.length === 0 && (
-            <p className="py-6 text-sm text-charcoal/60">No teachers found.</p>
+            <p className="py-8 text-center text-sm text-charcoal/50">
+              No teachers yet — add your first one above.
+            </p>
           )}
           {teachers.map((teacher) => (
-            <div key={teacher._id} className="flex items-center justify-between py-3">
+            <div
+              key={teacher._id}
+              className="flex items-center justify-between px-2 py-4 transition-colors hover:bg-ink/[0.02]"
+            >
               <div className="flex items-center gap-3">
                 {teacher.photoUrl ? (
                   <img
                     src={teacher.photoUrl}
                     alt={teacher.fullName}
-                    className="h-10 w-10 rounded-full object-cover"
+                    className="h-11 w-11 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="h-10 w-10 rounded-full bg-rule" />
+                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-rule text-sm font-medium text-charcoal/50">
+                    {teacher.fullName?.[0]}
+                  </div>
                 )}
                 <div>
                   <p className="text-sm font-medium text-ink">{teacher.fullName}</p>
-                  <p className="text-xs text-charcoal/60">{teacher.staffId}</p>
+                  <p className="text-xs text-charcoal/50">{teacher.staffId}</p>
                 </div>
               </div>
-              <div className="flex gap-3 text-xs">
-                <button onClick={() => onEdit(teacher)} className="text-brass underline">
+              <div className="flex gap-2">
+                <Button size="sm" variant="ghost" onClick={() => onEdit(teacher)}>
                   Edit
-                </button>
-                <button
-                  onClick={() => handleDeactivate(teacher._id)}
-                  className="text-red-700 underline"
-                >
+                </Button>
+                <Button size="sm" variant="dangerGhost" onClick={() => handleDeactivate(teacher._id)}>
                   Deactivate
-                </button>
+                </Button>
               </div>
             </div>
           ))}

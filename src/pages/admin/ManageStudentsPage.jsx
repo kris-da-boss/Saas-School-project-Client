@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Button from "../../components/ui/Button";
 import StudentList from "../../features/students/StudentList";
 import StudentForm from "../../features/students/StudentForm";
 
@@ -20,15 +21,14 @@ export default function ManageStudentsPage() {
           <p className="text-xs uppercase tracking-[0.2em] text-brass">Admin</p>
           <h1 className="font-display text-2xl text-ink">Students</h1>
         </div>
-        <button
+        <Button
           onClick={() => {
             setEditingStudent(null);
             setShowForm(true);
           }}
-          className="text-sm text-ink underline"
         >
           + Add student
-        </button>
+        </Button>
       </div>
 
       {showForm && (

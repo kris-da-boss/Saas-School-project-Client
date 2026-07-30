@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { getParents, deactivateParent } from "../../api/parent.api";
 import SearchBar from "../../components/shared/SearchBar";
 import Pagination from "../../components/shared/Pagination";
+import Button from "../../components/ui/Button";
 import { usePagination } from "../../hooks/usePagination";
 
 export default function ParentList({ onEdit, refreshKey }) {
@@ -47,39 +48,43 @@ export default function ParentList({ onEdit, refreshKey }) {
       ) : (
         <div className="divide-y divide-rule border-y border-rule">
           {parents.length === 0 && (
-            <p className="py-6 text-sm text-charcoal/60">No parents found.</p>
+            <p className="py-8 text-center text-sm text-charcoal/50">
+              No parents yet — add your first one above.
+            </p>
           )}
           {parents.map((parent) => (
-            <div key={parent._id} className="flex items-center justify-between py-3">
+            <div
+              key={parent._id}
+              className="flex items-center justify-between px-2 py-4 transition-colors hover:bg-ink/[0.02]"
+            >
               <div className="flex items-center gap-3">
                 {parent.photoUrl ? (
                   <img
                     src={parent.photoUrl}
                     alt={parent.fullName}
-                    className="h-10 w-10 rounded-full object-cover"
+                    className="h-11 w-11 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="h-10 w-10 rounded-full bg-rule" />
+                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-rule text-sm font-medium text-charcoal/50">
+                    {parent.fullName?.[0]}
+                  </div>
                 )}
                 <div>
                   <p className="text-sm font-medium text-ink">{parent.fullName}</p>
-                  <p className="text-xs text-charcoal/60">
+                  <p className="text-xs text-charcoal/50">
                     {parent.childrenIds?.length
                       ? parent.childrenIds.map((c) => c.fullName).join(", ")
                       : "No children linked"}
                   </p>
                 </div>
               </div>
-              <div className="flex gap-3 text-xs">
-                <button onClick={() => onEdit(parent)} className="text-brass underline">
+              <div className="flex gap-2">
+                <Button size="sm" variant="ghost" onClick={() => onEdit(parent)}>
                   Edit
-                </button>
-                <button
-                  onClick={() => handleDeactivate(parent._id)}
-                  className="text-red-700 underline"
-                >
+                </Button>
+                <Button size="sm" variant="dangerGhost" onClick={() => handleDeactivate(parent._id)}>
                   Deactivate
-                </button>
+                </Button>
               </div>
             </div>
           ))}

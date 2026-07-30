@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Button from "../../components/ui/Button";
 import ParentList from "../../features/parents/ParentList";
 import ParentForm from "../../features/parents/ParentForm";
 
@@ -20,15 +21,14 @@ export default function ManageParentsPage() {
           <p className="text-xs uppercase tracking-[0.2em] text-brass">Admin</p>
           <h1 className="font-display text-2xl text-ink">Parents</h1>
         </div>
-        <button
+        <Button
           onClick={() => {
             setEditingParent(null);
             setShowForm(true);
           }}
-          className="text-sm text-ink underline"
         >
           + Add parent
-        </button>
+        </Button>
       </div>
 
       {showForm && (

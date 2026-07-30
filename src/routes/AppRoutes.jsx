@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "../pages/public/LoginPage";
 import UnauthorizedPage from "../pages/public/UnauthorizedPage";
+import DashboardShell from "../components/layout/DashboardShell";
 import AdminDashboardPage from "../pages/admin/AdminDashboardPage";
 import ManageStudentsPage from "../pages/admin/ManageStudentsPage";
 import ManageTeachersPage from "../pages/admin/ManageTeachersPage";
@@ -17,46 +18,25 @@ export default function AppRoutes() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
+      {/* Nested layout route: Sidebar renders ONCE and persists across
+          /admin, /admin/students, /admin/teachers, /admin/parents — the
+          <Outlet/> inside DashboardShell swaps only the page content. */}
       <Route
         path="/admin"
         element={
           <ProtectedRoute>
             <RoleRoute allow={["admin"]}>
-              <AdminDashboardPage />
+              <DashboardShell />
             </RoleRoute>
           </ProtectedRoute>
         }
-      />
-      <Route
-        path="/admin/students"
-        element={
-          <ProtectedRoute>
-            <RoleRoute allow={["admin"]}>
-              <ManageStudentsPage />
-            </RoleRoute>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/teachers"
-        element={
-          <ProtectedRoute>
-            <RoleRoute allow={["admin"]}>
-              <ManageTeachersPage />
-            </RoleRoute>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/parents"
-        element={
-          <ProtectedRoute>
-            <RoleRoute allow={["admin"]}>
-              <ManageParentsPage />
-            </RoleRoute>
-          </ProtectedRoute>
-        }
-      />
+      >
+        <Route index element={<AdminDashboardPage />} />
+        <Route path="students" element={<ManageStudentsPage />} />
+        <Route path="teachers" element={<ManageTeachersPage />} />
+        <Route path="parents" element={<ManageParentsPage />} />
+      </Route>
+
       <Route
         path="/teacher"
         element={
