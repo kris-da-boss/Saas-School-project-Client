@@ -11,6 +11,7 @@ const emptyForm = {
   dob: "",
   gender: "",
   address: "",
+  className: "",
 };
 
 export default function StudentForm({ editingStudent, onSaved, onCancel }) {
@@ -30,6 +31,7 @@ export default function StudentForm({ editingStudent, onSaved, onCancel }) {
         dob: editingStudent.dob ? editingStudent.dob.slice(0, 10) : "",
         gender: editingStudent.gender || "",
         address: editingStudent.address || "",
+        className: editingStudent.classId?.name || "",
       });
     } else {
       setForm(emptyForm);
@@ -47,8 +49,23 @@ export default function StudentForm({ editingStudent, onSaved, onCancel }) {
     // FormData, not JSON — this request may contain a binary file
     const body = new FormData();
     Object.entries(form).forEach(([key, value]) => {
+      // className is special-cased below - skip it here so the generic
+      // "skip empty values" rule doesn't also swallow an intentional
+      // "clear this student's class" action.
+      if (key === "className") return;
       if (value) body.append(key, value);
     });
+
+    // Only send className on edit (where clearing it means "unassign" and
+    // the backend needs to see the empty string explicitly). On create, an
+    // empty className should simply mean "don't assign a class yet" - not
+    // sending the field at all already does that.
+    if (editingStudent) {
+      body.append("className", form.className);
+    } else if (form.className) {
+      body.append("className", form.className);
+    }
+
     if (photo) body.append("photo", photo);
 
     try {
@@ -111,6 +128,13 @@ export default function StudentForm({ editingStudent, onSaved, onCancel }) {
         placeholder="male / female"
       />
       <Input label="Address" name="address" value={form.address} onChange={handleChange} />
+      <Input
+        label="Class (optional)"
+        name="className"
+        value={form.className}
+        onChange={handleChange}
+        placeholder="e.g. JSS2A - leave blank to unassign"
+      />
 
       <div className="flex flex-col gap-1.5">
         <label className="text-xs uppercase tracking-widest text-charcoal/70">Photo</label>

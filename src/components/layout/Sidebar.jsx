@@ -1,5 +1,15 @@
 import { NavLink } from "react-router-dom";
-import { LayoutGrid, GraduationCap, Presentation, Users, LogOut, BookMarked, X } from "lucide-react";
+import {
+  LayoutGrid,
+  GraduationCap,
+  Presentation,
+  Users,
+  LogOut,
+  BookMarked,
+  X,
+  School,
+  BookOpen,
+} from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 
 const navItems = [
@@ -7,6 +17,8 @@ const navItems = [
   { to: "/admin/students", label: "Students", icon: GraduationCap },
   { to: "/admin/teachers", label: "Teachers", icon: Presentation },
   { to: "/admin/parents", label: "Parents", icon: Users },
+  { to: "/admin/classes", label: "Classes", icon: School },
+  { to: "/admin/subjects", label: "Subjects", icon: BookOpen },
 ];
 
 // isOpen/onClose only matter below the md breakpoint - on desktop the

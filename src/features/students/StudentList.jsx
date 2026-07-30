@@ -71,7 +71,10 @@ export default function StudentList({ onEdit, refreshKey }) {
                 )}
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium text-ink">{student.fullName}</p>
-                  <p className="truncate text-xs text-charcoal/50">{student.admissionNo}</p>
+                  <p className="truncate text-xs text-charcoal/50">
+                    {student.admissionNo}
+                    {student.classId ? ` · ${student.classId.name}` : ""}
+                  </p>
                 </div>
               </div>
               <div className="flex shrink-0 gap-2">

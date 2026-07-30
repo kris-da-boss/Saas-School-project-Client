@@ -6,6 +6,8 @@ import AdminDashboardPage from "../pages/admin/AdminDashboardPage";
 import ManageStudentsPage from "../pages/admin/ManageStudentsPage";
 import ManageTeachersPage from "../pages/admin/ManageTeachersPage";
 import ManageParentsPage from "../pages/admin/ManageParentsPage";
+import ManageClassesPage from "../pages/admin/ManageClassesPage";
+import ManageSubjectsPage from "../pages/admin/ManageSubjectsPage";
 import TeacherDashboardPage from "../pages/teacher/TeacherDashboardPage";
 import StudentDashboardPage from "../pages/student/StudentDashboardPage";
 import ParentDashboardPage from "../pages/parent/ParentDashboardPage";
@@ -35,6 +37,8 @@ export default function AppRoutes() {
         <Route path="students" element={<ManageStudentsPage />} />
         <Route path="teachers" element={<ManageTeachersPage />} />
         <Route path="parents" element={<ManageParentsPage />} />
+        <Route path="classes" element={<ManageClassesPage />} />
+        <Route path="subjects" element={<ManageSubjectsPage />} />
       </Route>
 
       <Route
