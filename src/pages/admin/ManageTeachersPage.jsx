@@ -15,8 +15,8 @@ export default function ManageTeachersPage() {
   };
 
   return (
-    <div className="p-8">
-      <div className="mb-6 flex items-center justify-between border-b border-rule pb-4">
+    <div className="p-4 sm:p-6 md:p-8">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-rule pb-4">
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-brass">Admin</p>
           <h1 className="font-display text-2xl text-ink">Teachers</h1>

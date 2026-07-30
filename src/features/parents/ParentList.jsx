@@ -55,9 +55,9 @@ export default function ParentList({ onEdit, refreshKey }) {
           {parents.map((parent) => (
             <div
               key={parent._id}
-              className="flex items-center justify-between px-2 py-4 transition-colors hover:bg-ink/[0.02]"
+              className="flex items-center justify-between gap-3 px-2 py-4 transition-colors hover:bg-ink/[0.02]"
             >
-              <div className="flex items-center gap-3">
+              <div className="flex min-w-0 items-center gap-3">
                 {parent.photoUrl ? (
                   <img
                     src={parent.photoUrl}
@@ -69,16 +69,16 @@ export default function ParentList({ onEdit, refreshKey }) {
                     {parent.fullName?.[0]}
                   </div>
                 )}
-                <div>
-                  <p className="text-sm font-medium text-ink">{parent.fullName}</p>
-                  <p className="text-xs text-charcoal/50">
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium text-ink">{parent.fullName}</p>
+                  <p className="truncate text-xs text-charcoal/50">
                     {parent.childrenIds?.length
                       ? parent.childrenIds.map((c) => c.fullName).join(", ")
                       : "No children linked"}
                   </p>
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className="flex shrink-0 gap-2">
                 <Button size="sm" variant="ghost" onClick={() => onEdit(parent)}>
                   Edit
                 </Button>

@@ -55,9 +55,9 @@ export default function StudentList({ onEdit, refreshKey }) {
           {students.map((student) => (
             <div
               key={student._id}
-              className="flex items-center justify-between px-2 py-4 transition-colors hover:bg-ink/[0.02]"
+              className="flex items-center justify-between gap-3 px-2 py-4 transition-colors hover:bg-ink/[0.02]"
             >
-              <div className="flex items-center gap-3">
+              <div className="flex min-w-0 items-center gap-3">
                 {student.photoUrl ? (
                   <img
                     src={student.photoUrl}
@@ -69,12 +69,12 @@ export default function StudentList({ onEdit, refreshKey }) {
                     {student.fullName?.[0]}
                   </div>
                 )}
-                <div>
-                  <p className="text-sm font-medium text-ink">{student.fullName}</p>
-                  <p className="text-xs text-charcoal/50">{student.admissionNo}</p>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium text-ink">{student.fullName}</p>
+                  <p className="truncate text-xs text-charcoal/50">{student.admissionNo}</p>
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className="flex shrink-0 gap-2">
                 <Button size="sm" variant="ghost" onClick={() => onEdit(student)}>
                   Edit
                 </Button>
