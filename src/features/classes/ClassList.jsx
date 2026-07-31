@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import { Link } from "react-router-dom";
 import { getClasses, deactivateClass } from "../../api/class.api";
 import SearchBar from "../../components/shared/SearchBar";
 import Pagination from "../../components/shared/Pagination";
@@ -74,6 +75,12 @@ export default function ClassList({ onEdit, refreshKey }) {
                 </p>
               </div>
               <div className="flex shrink-0 gap-2">
+                <Link
+                  to={`/admin/classes/${cls._id}/timetable`}
+                  className="rounded-sm border border-rule px-3 py-1.5 text-xs text-charcoal/80 transition-colors hover:border-brass hover:text-brass"
+                >
+                  Timetable
+                </Link>
                 <Button size="sm" variant="ghost" onClick={() => onEdit(cls)}>
                   Edit
                 </Button>

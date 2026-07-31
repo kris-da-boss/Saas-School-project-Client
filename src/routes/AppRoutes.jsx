@@ -7,6 +7,7 @@ import ManageStudentsPage from "../pages/admin/ManageStudentsPage";
 import ManageTeachersPage from "../pages/admin/ManageTeachersPage";
 import ManageParentsPage from "../pages/admin/ManageParentsPage";
 import ManageClassesPage from "../pages/admin/ManageClassesPage";
+import ClassTimetablePage from "../pages/admin/ClassTimetablePage";
 import ManageSubjectsPage from "../pages/admin/ManageSubjectsPage";
 import TeacherDashboardPage from "../pages/teacher/TeacherDashboardPage";
 import StudentDashboardPage from "../pages/student/StudentDashboardPage";
@@ -38,6 +39,7 @@ export default function AppRoutes() {
         <Route path="teachers" element={<ManageTeachersPage />} />
         <Route path="parents" element={<ManageParentsPage />} />
         <Route path="classes" element={<ManageClassesPage />} />
+        <Route path="classes/:classId/timetable" element={<ClassTimetablePage />} />
         <Route path="subjects" element={<ManageSubjectsPage />} />
       </Route>
 
