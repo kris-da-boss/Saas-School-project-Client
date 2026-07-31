@@ -3,7 +3,7 @@ import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
 import { createClass, updateClass } from "../../api/class.api";
 
-const emptyForm = { name: "", classTeacherId: "", capacity: "" };
+const emptyForm = { name: "", classTeacherStaffId: "", capacity: "" };
 
 export default function ClassForm({ editingClass, onSaved, onCancel }) {
   const [form, setForm] = useState(emptyForm);
@@ -14,7 +14,7 @@ export default function ClassForm({ editingClass, onSaved, onCancel }) {
     if (editingClass) {
       setForm({
         name: editingClass.name || "",
-        classTeacherId: editingClass.classTeacherId?._id || "",
+        classTeacherStaffId: editingClass.classTeacherId?.staffId || "",
         capacity: editingClass.capacity || "",
       });
     } else {
@@ -31,7 +31,10 @@ export default function ClassForm({ editingClass, onSaved, onCancel }) {
 
     const payload = {
       name: form.name,
-      classTeacherId: form.classTeacherId || null,
+      // Sent as-is (including "") rather than converted to null - the
+      // backend distinguishes "field not sent" from "sent empty to
+      // unassign the class teacher", same as className elsewhere.
+      classTeacherStaffId: form.classTeacherStaffId,
       capacity: form.capacity || null,
     };
 
@@ -55,11 +58,11 @@ export default function ClassForm({ editingClass, onSaved, onCancel }) {
 
       <Input label="Class name" name="name" value={form.name} onChange={handleChange} required />
       <Input
-        label="Class teacher's ID (optional)"
-        name="classTeacherId"
-        value={form.classTeacherId}
+        label="Class teacher's staff ID (optional)"
+        name="classTeacherStaffId"
+        value={form.classTeacherStaffId}
         onChange={handleChange}
-        placeholder="Paste the teacher's account ID from Manage Teachers"
+        placeholder="e.g. STAFF001 - leave blank to unassign"
       />
       <Input
         label="Capacity (optional)"
