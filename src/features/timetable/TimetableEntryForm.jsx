@@ -8,7 +8,7 @@ const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 const emptyForm = { day: "Monday", startTime: "", endTime: "", subjectId: "", teacherId: "" };
 
 const selectClasses =
-  "border-b border-rule bg-transparent py-2 text-charcoal outline-none focus:border-brass";
+  "w-full border-b border-rule bg-transparent py-2 text-charcoal outline-none focus:border-brass";
 
 export default function TimetableEntryForm({ classId, editingEntry, onSaved, onCancel }) {
   const [subjects, setSubjects] = useState([]);
@@ -89,7 +89,7 @@ export default function TimetableEntryForm({ classId, editingEntry, onSaved, onC
         </select>
       </div>
 
-      <div className="flex gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row">
         <div className="flex flex-1 flex-col gap-1.5">
           <label className="text-xs uppercase tracking-widest text-charcoal/70">Start time</label>
           <input
