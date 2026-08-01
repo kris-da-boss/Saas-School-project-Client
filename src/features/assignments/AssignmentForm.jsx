@@ -2,14 +2,17 @@ import { useState, useEffect } from "react";
 import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
 import { getClasses } from "../../api/class.api";
+import { getMyClasses } from "../../api/teacherClass.api";
 import { getSubjects } from "../../api/subject.api";
 import { createAssignment, updateAssignment } from "../../api/assignment.api";
+import { useAuth } from "../../hooks/useAuth";
 
 const emptyForm = { classId: "", subjectId: "", title: "", description: "", dueDate: "" };
 const selectClasses =
   "w-full border-b border-rule bg-transparent py-2 text-charcoal outline-none focus:border-brass";
 
 export default function AssignmentForm({ editingAssignment, onSaved, onCancel }) {
+  const { user } = useAuth();
   const [classes, setClasses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [form, setForm] = useState(emptyForm);
@@ -18,14 +21,16 @@ export default function AssignmentForm({ editingAssignment, onSaved, onCancel })
 
   useEffect(() => {
     (async () => {
-      const [classesRes, subjectsRes] = await Promise.all([
-        getClasses({ limit: 100 }),
-        getSubjects({ limit: 100 }),
-      ]);
+      // Teachers only see classes they're actually assigned to - showing
+      // the whole school's classes would let them pick one the backend
+      // then rejects, which is a confusing dead end.
+      const classesRequest =
+        user?.role === "teacher" ? getMyClasses() : getClasses({ limit: 100 });
+      const [classesRes, subjectsRes] = await Promise.all([classesRequest, getSubjects({ limit: 100 })]);
       setClasses(classesRes.data.data);
       setSubjects(subjectsRes.data.data);
     })();
-  }, []);
+  }, [user?.role]);
 
   useEffect(() => {
     if (editingAssignment) {

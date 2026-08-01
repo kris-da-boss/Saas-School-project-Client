@@ -3,12 +3,12 @@ import { Outlet } from "react-router-dom";
 import { Menu } from "lucide-react";
 import Sidebar from "./Sidebar";
 
-export default function DashboardShell() {
+export default function DashboardShell({ navItems, roleLabel }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="flex min-h-screen bg-parchment">
-      <Sidebar isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <Sidebar isOpen={isOpen} onClose={() => setIsOpen(false)} navItems={navItems} roleLabel={roleLabel} />
 
       {/* min-w-0 is important here: without it, a flex child containing wide
           content (long names, tables) refuses to shrink below its content's
@@ -20,7 +20,7 @@ export default function DashboardShell() {
           <button onClick={() => setIsOpen(true)} aria-label="Open menu" className="text-ink">
             <Menu size={22} strokeWidth={1.75} />
           </button>
-          <p className="font-display text-lg text-ink">Admin</p>
+          <p className="font-display text-lg text-ink">{roleLabel}</p>
         </header>
 
         <main className="min-w-0 flex-1 overflow-y-auto">

@@ -25,12 +25,16 @@ export default function AttendanceForm({ classId, onSaved }) {
   const fetchRoster = useCallback(async () => {
     setLoading(true);
     setSaved(false);
+    setError("");
     try {
       const { data } = await getAttendanceForDate(classId, date);
       // Unmarked students default to "present" here in the UI only - the
       // backend keeps status as null until explicitly submitted, so nothing
       // is recorded as attendance until the admin actually hits Save.
       setRoster(data.data.roster.map((s) => ({ ...s, status: s.status || "present" })));
+    } catch (err) {
+      setError(err.response?.data?.message || "Could not load this class's roster");
+      setRoster([]);
     } finally {
       setLoading(false);
     }
@@ -76,6 +80,8 @@ export default function AttendanceForm({ classId, onSaved }) {
 
       {loading ? (
         <p className="text-sm text-charcoal/60">Loading roster...</p>
+      ) : error && roster.length === 0 ? (
+        <p className="py-8 text-center text-sm text-red-700">{error}</p>
       ) : roster.length === 0 ? (
         <p className="py-8 text-center text-sm text-charcoal/50">No students in this class yet.</p>
       ) : (
@@ -110,7 +116,7 @@ export default function AttendanceForm({ classId, onSaved }) {
         </div>
       )}
 
-      {error && <p className="text-sm text-red-700">{error}</p>}
+      {error && roster.length > 0 && <p className="text-sm text-red-700">{error}</p>}
       {saved && <p className="text-sm text-forest">Attendance saved for {date}.</p>}
 
       {roster.length > 0 && (

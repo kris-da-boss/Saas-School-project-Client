@@ -1,12 +1,18 @@
 import { useEffect, useState, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { getAssignments, deactivateAssignment } from "../../api/assignment.api";
 import SearchBar from "../../components/shared/SearchBar";
 import Pagination from "../../components/shared/Pagination";
 import Button from "../../components/ui/Button";
 import { usePagination } from "../../hooks/usePagination";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function AssignmentList({ onEdit, refreshKey }) {
+  const { user } = useAuth();
+  const [searchParams] = useSearchParams();
+  const classIdFilter = searchParams.get("classId") || "";
+  const basePath = user?.role === "teacher" ? "/teacher" : "/admin";
+
   const [assignments, setAssignments] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
@@ -15,13 +21,18 @@ export default function AssignmentList({ onEdit, refreshKey }) {
   const fetchAssignments = useCallback(async () => {
     setLoading(true);
     try {
-      const { data } = await getAssignments({ page, limit, search });
+      const { data } = await getAssignments({
+        page,
+        limit,
+        search,
+        classId: classIdFilter || undefined,
+      });
       setAssignments(data.data);
       setTotal(data.pagination.total);
     } finally {
       setLoading(false);
     }
-  }, [page, limit, search, setTotal]);
+  }, [page, limit, search, classIdFilter, setTotal]);
 
   useEffect(() => {
     fetchAssignments();
@@ -70,7 +81,7 @@ export default function AssignmentList({ onEdit, refreshKey }) {
               </div>
               <div className="flex shrink-0 gap-2">
                 <Link
-                  to={`/admin/assignments/${assignment._id}/grade`}
+                  to={`${basePath}/assignments/${assignment._id}/grade`}
                   className="rounded-sm border border-rule px-3 py-1.5 text-xs text-charcoal/80 transition-colors hover:border-brass hover:text-brass"
                 >
                   Submissions

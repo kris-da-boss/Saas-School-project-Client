@@ -1,32 +1,11 @@
 import { NavLink } from "react-router-dom";
-import {
-  LayoutGrid,
-  GraduationCap,
-  Presentation,
-  Users,
-  LogOut,
-  BookMarked,
-  X,
-  School,
-  BookOpen,
-  ClipboardList,
-} from "lucide-react";
+import { LogOut, BookMarked, X } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
-
-const navItems = [
-  { to: "/admin", label: "Overview", icon: LayoutGrid, end: true },
-  { to: "/admin/students", label: "Students", icon: GraduationCap },
-  { to: "/admin/teachers", label: "Teachers", icon: Presentation },
-  { to: "/admin/parents", label: "Parents", icon: Users },
-  { to: "/admin/classes", label: "Classes", icon: School },
-  { to: "/admin/subjects", label: "Subjects", icon: BookOpen },
-  { to: "/admin/assignments", label: "Assignments", icon: ClipboardList },
-];
 
 // isOpen/onClose only matter below the md breakpoint - on desktop the
 // sidebar is always visible and these props are effectively ignored
 // (md:translate-x-0 always wins there).
-export default function Sidebar({ isOpen, onClose }) {
+export default function Sidebar({ isOpen, onClose, navItems, roleLabel }) {
   const { user, logout } = useAuth();
 
   return (
@@ -50,7 +29,7 @@ export default function Sidebar({ isOpen, onClose }) {
               </div>
               <div>
                 <p className="text-[10px] uppercase tracking-[0.2em] text-brass">Registrar's Office</p>
-                <p className="font-display text-sm text-parchment/90">Admin</p>
+                <p className="font-display text-sm text-parchment/90">{roleLabel}</p>
               </div>
             </div>
             {/* Close button only ever shown on mobile - desktop sidebar

@@ -2,9 +2,12 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getAssignmentById, getAssignmentRoster, gradeSubmission } from "../../api/assignment.api";
 import Button from "../../components/ui/Button";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function AssignmentGradingPage() {
   const { id } = useParams();
+  const { user } = useAuth();
+  const basePath = user?.role === "teacher" ? "/teacher" : "/admin";
   const [assignment, setAssignment] = useState(null);
   const [roster, setRoster] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -69,7 +72,7 @@ export default function AssignmentGradingPage() {
   return (
     <div className="p-4 sm:p-6 md:p-8">
       <div className="mb-6 border-b border-rule pb-4">
-        <Link to="/admin/assignments" className="text-xs uppercase tracking-[0.2em] text-brass">
+        <Link to={`${basePath}/assignments`} className="text-xs uppercase tracking-[0.2em] text-brass">
           ← Back to assignments
         </Link>
         <h1 className="mt-1 font-display text-2xl text-ink">{assignment?.title}</h1>
