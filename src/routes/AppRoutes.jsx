@@ -8,7 +8,10 @@ import ManageTeachersPage from "../pages/admin/ManageTeachersPage";
 import ManageParentsPage from "../pages/admin/ManageParentsPage";
 import ManageClassesPage from "../pages/admin/ManageClassesPage";
 import ClassTimetablePage from "../pages/admin/ClassTimetablePage";
+import ClassAttendancePage from "../pages/admin/ClassAttendancePage";
 import ManageSubjectsPage from "../pages/admin/ManageSubjectsPage";
+import ManageAssignmentsPage from "../pages/admin/ManageAssignmentsPage";
+import AssignmentGradingPage from "../pages/admin/AssignmentGradingPage";
 import TeacherDashboardPage from "../pages/teacher/TeacherDashboardPage";
 import StudentDashboardPage from "../pages/student/StudentDashboardPage";
 import ParentDashboardPage from "../pages/parent/ParentDashboardPage";
@@ -40,7 +43,10 @@ export default function AppRoutes() {
         <Route path="parents" element={<ManageParentsPage />} />
         <Route path="classes" element={<ManageClassesPage />} />
         <Route path="classes/:classId/timetable" element={<ClassTimetablePage />} />
+        <Route path="classes/:classId/attendance" element={<ClassAttendancePage />} />
         <Route path="subjects" element={<ManageSubjectsPage />} />
+        <Route path="assignments" element={<ManageAssignmentsPage />} />
+        <Route path="assignments/:id/grade" element={<AssignmentGradingPage />} />
       </Route>
 
       <Route

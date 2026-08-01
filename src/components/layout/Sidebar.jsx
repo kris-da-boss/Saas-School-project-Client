@@ -9,6 +9,7 @@ import {
   X,
   School,
   BookOpen,
+  ClipboardList,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -19,6 +20,7 @@ const navItems = [
   { to: "/admin/parents", label: "Parents", icon: Users },
   { to: "/admin/classes", label: "Classes", icon: School },
   { to: "/admin/subjects", label: "Subjects", icon: BookOpen },
+  { to: "/admin/assignments", label: "Assignments", icon: ClipboardList },
 ];
 
 // isOpen/onClose only matter below the md breakpoint - on desktop the
