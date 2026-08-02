@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ExamList from "../../features/exams/ExamList";
-import ExamForm from "../../features/exams/ExamForm";
+import ExamSittingForm from "../../features/exams/ExamSittingForm";
 import Button from "../../components/ui/Button";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -23,12 +23,12 @@ export default function ManageExamsPage() {
           </p>
           <h1 className="font-display text-2xl text-ink">Exams</h1>
         </div>
-        <Button onClick={() => setShowForm(true)}>+ Add exam</Button>
+        <Button onClick={() => setShowForm(true)}>+ Schedule exams</Button>
       </div>
 
       {showForm && (
         <div className="mb-8">
-          <ExamForm onSaved={handleSaved} onCancel={() => setShowForm(false)} />
+          <ExamSittingForm onSaved={handleSaved} onCancel={() => setShowForm(false)} />
         </div>
       )}
 

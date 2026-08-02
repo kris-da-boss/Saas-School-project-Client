@@ -14,6 +14,7 @@ import ManageSubjectsPage from "../pages/admin/ManageSubjectsPage";
 import ManageAssignmentsPage from "../pages/admin/ManageAssignmentsPage";
 import AssignmentGradingPage from "../pages/admin/AssignmentGradingPage";
 import ManageExamsPage from "../pages/admin/ManageExamsPage";
+import ExamSittingDetailPage from "../pages/admin/ExamSittingDetailPage";
 import ExamResultsPage from "../pages/admin/ExamResultsPage";
 import ReportCardsPage from "../pages/admin/ReportCardsPage";
 import TeacherDashboardPage from "../pages/teacher/TeacherDashboardPage";
@@ -53,6 +54,7 @@ export default function AppRoutes() {
         <Route path="assignments" element={<ManageAssignmentsPage />} />
         <Route path="assignments/:id/grade" element={<AssignmentGradingPage />} />
         <Route path="exams" element={<ManageExamsPage />} />
+        <Route path="exams/sitting" element={<ExamSittingDetailPage />} />
         <Route path="exams/:examId/results" element={<ExamResultsPage />} />
         <Route path="report-cards" element={<ReportCardsPage />} />
       </Route>
@@ -77,6 +79,7 @@ export default function AppRoutes() {
         <Route path="assignments" element={<ManageAssignmentsPage />} />
         <Route path="assignments/:id/grade" element={<AssignmentGradingPage />} />
         <Route path="exams" element={<ManageExamsPage />} />
+        <Route path="exams/sitting" element={<ExamSittingDetailPage />} />
         <Route path="exams/:examId/results" element={<ExamResultsPage />} />
         <Route path="report-cards" element={<ReportCardsPage />} />
       </Route>
