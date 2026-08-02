@@ -6,6 +6,8 @@ import {
   School,
   BookOpen,
   ClipboardList,
+  FileCheck,
+  Award,
 } from "lucide-react";
 
 export const adminNavItems = [
@@ -16,10 +18,14 @@ export const adminNavItems = [
   { to: "/admin/classes", label: "Classes", icon: School },
   { to: "/admin/subjects", label: "Subjects", icon: BookOpen },
   { to: "/admin/assignments", label: "Assignments", icon: ClipboardList },
+  { to: "/admin/exams", label: "Exams", icon: FileCheck },
+  { to: "/admin/report-cards", label: "Report Cards", icon: Award },
 ];
 
 export const teacherNavItems = [
   { to: "/teacher", label: "Overview", icon: LayoutGrid, end: true },
   { to: "/teacher/classes", label: "My Classes", icon: School },
   { to: "/teacher/assignments", label: "Assignments", icon: ClipboardList },
+  { to: "/teacher/exams", label: "Exams", icon: FileCheck },
+  { to: "/teacher/report-cards", label: "Report Cards", icon: Award },
 ];

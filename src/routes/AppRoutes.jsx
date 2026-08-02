@@ -13,6 +13,9 @@ import ClassAttendancePage from "../pages/admin/ClassAttendancePage";
 import ManageSubjectsPage from "../pages/admin/ManageSubjectsPage";
 import ManageAssignmentsPage from "../pages/admin/ManageAssignmentsPage";
 import AssignmentGradingPage from "../pages/admin/AssignmentGradingPage";
+import ManageExamsPage from "../pages/admin/ManageExamsPage";
+import ExamResultsPage from "../pages/admin/ExamResultsPage";
+import ReportCardsPage from "../pages/admin/ReportCardsPage";
 import TeacherDashboardPage from "../pages/teacher/TeacherDashboardPage";
 import TeacherClassesPage from "../pages/teacher/TeacherClassesPage";
 import StudentDashboardPage from "../pages/student/StudentDashboardPage";
@@ -49,6 +52,9 @@ export default function AppRoutes() {
         <Route path="subjects" element={<ManageSubjectsPage />} />
         <Route path="assignments" element={<ManageAssignmentsPage />} />
         <Route path="assignments/:id/grade" element={<AssignmentGradingPage />} />
+        <Route path="exams" element={<ManageExamsPage />} />
+        <Route path="exams/:examId/results" element={<ExamResultsPage />} />
+        <Route path="report-cards" element={<ReportCardsPage />} />
       </Route>
 
       {/* Teacher shell - same pattern, own nav, reuses the Attendance and
@@ -70,6 +76,9 @@ export default function AppRoutes() {
         <Route path="classes/:classId/attendance" element={<ClassAttendancePage />} />
         <Route path="assignments" element={<ManageAssignmentsPage />} />
         <Route path="assignments/:id/grade" element={<AssignmentGradingPage />} />
+        <Route path="exams" element={<ManageExamsPage />} />
+        <Route path="exams/:examId/results" element={<ExamResultsPage />} />
+        <Route path="report-cards" element={<ReportCardsPage />} />
       </Route>
 
       <Route

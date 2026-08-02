@@ -1,5 +1,6 @@
 import { useAuth } from "../../hooks/useAuth";
 import MyAssignments from "../../features/assignments/MyAssignments";
+import MyReportCard from "../../features/reportCard/MyReportCard";
 
 export default function StudentDashboardPage() {
   const { user, logout } = useAuth();
@@ -18,6 +19,9 @@ export default function StudentDashboardPage() {
 
       <p className="mb-3 text-xs uppercase tracking-[0.2em] text-brass">My assignments</p>
       <MyAssignments />
+
+      <p className="mb-3 mt-10 text-xs uppercase tracking-[0.2em] text-brass">My report card</p>
+      <MyReportCard />
     </div>
   );
 }
