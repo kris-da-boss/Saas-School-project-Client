@@ -2,6 +2,7 @@ import { useState } from "react";
 import { getMyReportCard, downloadMyReportCardPdf } from "../../api/result.api";
 import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
+import ReportCardDocument from "./ReportCardDocument";
 
 const TERMS = ["First Term", "Second Term", "Third Term"];
 
@@ -45,6 +46,8 @@ export default function MyReportCard() {
     }
   };
 
+  const hasResults = reportCard?.subjects?.length > 0;
+
   return (
     <div className="flex flex-col gap-6">
       <form onSubmit={handleView} className="flex flex-wrap items-end gap-4">
@@ -77,41 +80,19 @@ export default function MyReportCard() {
       {error && <p className="text-sm text-red-700">{error}</p>}
 
       {reportCard && (
-        <div className="border border-rule p-6">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-rule pb-4">
-            <p className="text-xs text-charcoal/50">
-              {reportCard.term} · {reportCard.session}
-            </p>
-            <Button size="sm" variant="ghost" onClick={handleDownload} disabled={downloading}>
-              {downloading ? "Preparing..." : "Download PDF"}
-            </Button>
-          </div>
-
-          {reportCard.subjects.length === 0 ? (
-            <p className="text-sm text-charcoal/50">No results recorded for this term yet.</p>
-          ) : (
-            <div className="divide-y divide-rule">
-              {reportCard.subjects.map((s) => (
-                <div key={s.code} className="flex items-center justify-between py-2 text-sm">
-                  <span className="text-ink">
-                    {s.subject} <span className="text-charcoal/40">({s.code})</span>
-                  </span>
-                  <span className="text-charcoal/60">
-                    {s.score}/{s.maxScore} · Grade {s.grade}
-                  </span>
-                </div>
-              ))}
+        <div className="flex flex-col gap-4">
+          {/* Only shown when there's actually something to download - a
+              student shouldn't be able to trigger a download that the
+              backend would just reject as empty. */}
+          {hasResults && (
+            <div className="flex justify-end">
+              <Button size="sm" variant="ghost" onClick={handleDownload} disabled={downloading}>
+                {downloading ? "Preparing..." : "Download PDF"}
+              </Button>
             </div>
           )}
 
-          <div className="mt-4 flex flex-wrap gap-6 border-t border-rule pt-4 text-sm">
-            <p className="font-medium text-ink">Average: {reportCard.average}%</p>
-            {reportCard.position && (
-              <p className="font-medium text-ink">
-                Position: {reportCard.position} of {reportCard.classSize}
-              </p>
-            )}
-          </div>
+          <ReportCardDocument reportCard={reportCard} />
         </div>
       )}
     </div>

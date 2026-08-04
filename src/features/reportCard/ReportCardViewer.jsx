@@ -3,10 +3,13 @@ import { getStudents } from "../../api/student.api";
 import { getReportCard, downloadReportCardPdf } from "../../api/result.api";
 import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
+import ReportCardDocument from "./ReportCardDocument";
+import { useAuth } from "../../hooks/useAuth";
 
 const TERMS = ["First Term", "Second Term", "Third Term"];
 
 export default function ReportCardViewer() {
+  const { user } = useAuth();
   const [admissionNo, setAdmissionNo] = useState("");
   const [term, setTerm] = useState(TERMS[0]);
   const [session, setSession] = useState("");
@@ -64,6 +67,14 @@ export default function ReportCardViewer() {
     }
   };
 
+  const refetchAfterRemarks = async () => {
+    if (!resolvedStudentId) return;
+    const { data } = await getReportCard(resolvedStudentId, term, session);
+    setReportCard(data.data);
+  };
+
+  const hasResults = reportCard?.subjects?.length > 0;
+
   return (
     <div className="flex flex-col gap-6">
       <form onSubmit={handleSearch} className="flex flex-wrap items-end gap-4">
@@ -102,44 +113,25 @@ export default function ReportCardViewer() {
       {error && <p className="text-sm text-red-700">{error}</p>}
 
       {reportCard && (
-        <div className="border border-rule p-6">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-rule pb-4">
-            <div>
-              <p className="font-display text-lg text-ink">{reportCard.student.fullName}</p>
-              <p className="text-xs text-charcoal/50">
-                {reportCard.student.admissionNo} · {reportCard.term} · {reportCard.session}
-              </p>
-            </div>
-            <Button size="sm" variant="ghost" onClick={handleDownload} disabled={downloading}>
-              {downloading ? "Preparing..." : "Download PDF"}
-            </Button>
-          </div>
-
-          {reportCard.subjects.length === 0 ? (
-            <p className="text-sm text-charcoal/50">No results recorded for this term yet.</p>
-          ) : (
-            <div className="divide-y divide-rule">
-              {reportCard.subjects.map((s) => (
-                <div key={s.code} className="flex items-center justify-between py-2 text-sm">
-                  <span className="text-ink">
-                    {s.subject} <span className="text-charcoal/40">({s.code})</span>
-                  </span>
-                  <span className="text-charcoal/60">
-                    {s.score}/{s.maxScore} · Grade {s.grade}
-                  </span>
-                </div>
-              ))}
+        <div className="flex flex-col gap-4">
+          {/* Only ever show the download button when there's something real
+              to download - matches the backend's own refusal to generate an
+              empty PDF, rather than letting the click happen and fail. */}
+          {hasResults && (
+            <div className="flex justify-end">
+              <Button size="sm" variant="ghost" onClick={handleDownload} disabled={downloading}>
+                {downloading ? "Preparing..." : "Download PDF"}
+              </Button>
             </div>
           )}
 
-          <div className="mt-4 flex flex-wrap gap-6 border-t border-rule pt-4 text-sm">
-            <p className="font-medium text-ink">Average: {reportCard.average}%</p>
-            {reportCard.position && (
-              <p className="font-medium text-ink">
-                Position: {reportCard.position} of {reportCard.classSize}
-              </p>
-            )}
-          </div>
+          <ReportCardDocument
+            reportCard={reportCard}
+            studentId={resolvedStudentId}
+            canEditTeacherComment={user?.role === "admin" || user?.role === "teacher"}
+            canEditPrincipalComment={user?.role === "admin"}
+            onRemarksSaved={refetchAfterRemarks}
+          />
         </div>
       )}
     </div>

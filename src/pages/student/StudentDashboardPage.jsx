@@ -1,6 +1,7 @@
 import { useAuth } from "../../hooks/useAuth";
 import MyAssignments from "../../features/assignments/MyAssignments";
 import MyReportCard from "../../features/reportCard/MyReportCard";
+import NotificationBell from "../../components/shared/NotificationBell";
 
 export default function StudentDashboardPage() {
   const { user, logout } = useAuth();
@@ -12,9 +13,12 @@ export default function StudentDashboardPage() {
           <p className="text-xs uppercase tracking-[0.2em] text-brass">Student</p>
           <h1 className="font-display text-2xl text-ink">Welcome, {user?.fullName}</h1>
         </div>
-        <button onClick={logout} className="text-sm underline text-charcoal/70">
-          Sign out
-        </button>
+        <div className="flex items-center gap-4">
+          <NotificationBell />
+          <button onClick={logout} className="text-sm underline text-charcoal/70">
+            Sign out
+          </button>
+        </div>
       </div>
 
       <p className="mb-3 text-xs uppercase tracking-[0.2em] text-brass">My assignments</p>

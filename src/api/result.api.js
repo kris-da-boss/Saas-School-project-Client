@@ -19,3 +19,8 @@ export const downloadMyReportCardPdf = (term, session) =>
     params: { term, session },
     responseType: "blob",
   });
+
+// admin: teacherComment + principalComment; teacher: teacherComment only
+// (backend enforces this - the UI just doesn't render the field it can't use)
+export const saveReportCardRemarks = (studentId, payload) =>
+  axiosClient.patch(`/results/report-card/${studentId}/remarks`, payload);

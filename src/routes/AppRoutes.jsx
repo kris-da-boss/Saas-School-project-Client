@@ -17,6 +17,7 @@ import ManageExamsPage from "../pages/admin/ManageExamsPage";
 import ExamSittingDetailPage from "../pages/admin/ExamSittingDetailPage";
 import ExamResultsPage from "../pages/admin/ExamResultsPage";
 import ReportCardsPage from "../pages/admin/ReportCardsPage";
+import ManageAnnouncementsPage from "../pages/admin/ManageAnnouncementsPage";
 import TeacherDashboardPage from "../pages/teacher/TeacherDashboardPage";
 import TeacherClassesPage from "../pages/teacher/TeacherClassesPage";
 import StudentDashboardPage from "../pages/student/StudentDashboardPage";
@@ -57,6 +58,7 @@ export default function AppRoutes() {
         <Route path="exams/sitting" element={<ExamSittingDetailPage />} />
         <Route path="exams/:examId/results" element={<ExamResultsPage />} />
         <Route path="report-cards" element={<ReportCardsPage />} />
+        <Route path="announcements" element={<ManageAnnouncementsPage />} />
       </Route>
 
       {/* Teacher shell - same pattern, own nav, reuses the Attendance and
@@ -82,6 +84,7 @@ export default function AppRoutes() {
         <Route path="exams/sitting" element={<ExamSittingDetailPage />} />
         <Route path="exams/:examId/results" element={<ExamResultsPage />} />
         <Route path="report-cards" element={<ReportCardsPage />} />
+        <Route path="announcements" element={<ManageAnnouncementsPage />} />
       </Route>
 
       <Route

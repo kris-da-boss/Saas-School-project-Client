@@ -1,4 +1,5 @@
 import ReportCardViewer from "../../features/reportCard/ReportCardViewer";
+import TermDatesForm from "../../features/reportCard/TermDatesForm";
 import { useAuth } from "../../hooks/useAuth";
 
 export default function ReportCardsPage() {
@@ -12,6 +13,7 @@ export default function ReportCardsPage() {
         </p>
         <h1 className="font-display text-2xl text-ink">Report Cards</h1>
       </div>
+      {user?.role === "admin" && <TermDatesForm />}
       <ReportCardViewer />
     </div>
   );

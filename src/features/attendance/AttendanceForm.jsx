@@ -9,6 +9,7 @@ const STATUS_STYLES = {
   late: "bg-brass text-parchment border-brass",
   excused: "bg-charcoal/60 text-parchment border-charcoal/60",
 };
+const TERMS = ["First Term", "Second Term", "Third Term"];
 
 function todayISO() {
   return new Date().toISOString().slice(0, 10);
@@ -16,6 +17,11 @@ function todayISO() {
 
 export default function AttendanceForm({ classId, onSaved }) {
   const [date, setDate] = useState(todayISO());
+  // Tagging attendance with term/session is what lets a report card later
+  // compute a real attendance summary. Not required, but strongly
+  // recommended - see the note below the roster.
+  const [term, setTerm] = useState(TERMS[0]);
+  const [session, setSession] = useState("");
   const [roster, setRoster] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -32,6 +38,11 @@ export default function AttendanceForm({ classId, onSaved }) {
       // backend keeps status as null until explicitly submitted, so nothing
       // is recorded as attendance until the admin actually hits Save.
       setRoster(data.data.roster.map((s) => ({ ...s, status: s.status || "present" })));
+      // If this date was already marked with a term/session, reflect that.
+      // Otherwise, leave the current selection alone - re-picking the term
+      // for every single day would be tedious busywork.
+      if (data.data.term) setTerm(data.data.term);
+      if (data.data.session) setSession(data.data.session);
     } catch (err) {
       setError(err.response?.data?.message || "Could not load this class's roster");
       setRoster([]);
@@ -54,6 +65,8 @@ export default function AttendanceForm({ classId, onSaved }) {
     try {
       await markAttendance(classId, {
         date,
+        term,
+        session,
         records: roster.map((s) => ({ studentId: s.studentId, status: s.status })),
       });
       setSaved(true);
@@ -67,16 +80,45 @@ export default function AttendanceForm({ classId, onSaved }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-wrap items-center gap-3">
-        <label className="text-xs uppercase tracking-widest text-charcoal/70">Date</label>
-        <input
-          type="date"
-          value={date}
-          max={todayISO()}
-          onChange={(e) => setDate(e.target.value)}
-          className="border-b border-rule bg-transparent py-2 text-charcoal outline-none focus:border-brass"
-        />
+      <div className="flex flex-wrap items-end gap-4">
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs uppercase tracking-widest text-charcoal/70">Date</label>
+          <input
+            type="date"
+            value={date}
+            max={todayISO()}
+            onChange={(e) => setDate(e.target.value)}
+            className="border-b border-rule bg-transparent py-2 text-charcoal outline-none focus:border-brass"
+          />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs uppercase tracking-widest text-charcoal/70">Term</label>
+          <select
+            value={term}
+            onChange={(e) => setTerm(e.target.value)}
+            className="border-b border-rule bg-transparent py-2 text-charcoal outline-none focus:border-brass"
+          >
+            {TERMS.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs uppercase tracking-widest text-charcoal/70">Session</label>
+          <input
+            type="text"
+            value={session}
+            onChange={(e) => setSession(e.target.value)}
+            placeholder="e.g. 2026/2027"
+            className="border-b border-rule bg-transparent py-2 text-charcoal outline-none focus:border-brass"
+          />
+        </div>
       </div>
+      <p className="text-xs text-charcoal/40">
+        Term and session let this attendance count toward that period's report cards.
+      </p>
 
       {loading ? (
         <p className="text-sm text-charcoal/60">Loading roster...</p>

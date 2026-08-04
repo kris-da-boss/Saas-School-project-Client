@@ -1,5 +1,6 @@
 import { useAuth } from "../../hooks/useAuth";
 import MyChildrenReportCards from "../../features/reportCard/MyChildrenReportCards";
+import NotificationBell from "../../components/shared/NotificationBell";
 
 export default function ParentDashboardPage() {
   const { user, logout } = useAuth();
@@ -11,9 +12,12 @@ export default function ParentDashboardPage() {
           <p className="text-xs uppercase tracking-[0.2em] text-brass">Parent</p>
           <h1 className="font-display text-2xl text-ink">Welcome, {user?.fullName}</h1>
         </div>
-        <button onClick={logout} className="text-sm underline text-charcoal/70">
-          Sign out
-        </button>
+        <div className="flex items-center gap-4">
+          <NotificationBell />
+          <button onClick={logout} className="text-sm underline text-charcoal/70">
+            Sign out
+          </button>
+        </div>
       </div>
 
       <p className="mb-3 text-xs uppercase tracking-[0.2em] text-brass">Report cards</p>
