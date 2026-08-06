@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "../pages/public/LoginPage";
 import UnauthorizedPage from "../pages/public/UnauthorizedPage";
 import DashboardShell from "../components/layout/DashboardShell";
-import { adminNavItems, teacherNavItems } from "../config/navItems";
+import { adminNavItems, teacherNavItems, studentNavItems, parentNavItems } from "../config/navItems";
 import AdminDashboardPage from "../pages/admin/AdminDashboardPage";
 import ManageStudentsPage from "../pages/admin/ManageStudentsPage";
 import ManageTeachersPage from "../pages/admin/ManageTeachersPage";
@@ -21,7 +21,11 @@ import ManageAnnouncementsPage from "../pages/admin/ManageAnnouncementsPage";
 import TeacherDashboardPage from "../pages/teacher/TeacherDashboardPage";
 import TeacherClassesPage from "../pages/teacher/TeacherClassesPage";
 import StudentDashboardPage from "../pages/student/StudentDashboardPage";
+import StudentAssignmentsPage from "../pages/student/StudentAssignmentsPage";
+import StudentReportCardPage from "../pages/student/StudentReportCardPage";
+import StudentTimetablePage from "../pages/student/StudentTimetablePage";
 import ParentDashboardPage from "../pages/parent/ParentDashboardPage";
+import ParentReportCardPage from "../pages/parent/ParentReportCardPage";
 import ProtectedRoute from "./ProtectedRoute";
 import RoleRoute from "./RoleRoute";
 
@@ -87,26 +91,41 @@ export default function AppRoutes() {
         <Route path="announcements" element={<ManageAnnouncementsPage />} />
       </Route>
 
+      {/* Student shell - Overview is now a lean summary; My Assignments,
+          Report Card, and Timetable each get their own page, reached via
+          the sidebar or the Overview's quick-shortcut links. */}
       <Route
         path="/student"
         element={
           <ProtectedRoute>
             <RoleRoute allow={["student"]}>
-              <StudentDashboardPage />
+              <DashboardShell navItems={studentNavItems} roleLabel="Student" />
             </RoleRoute>
           </ProtectedRoute>
         }
-      />
+      >
+        <Route index element={<StudentDashboardPage />} />
+        <Route path="assignments" element={<StudentAssignmentsPage />} />
+        <Route path="report-card" element={<StudentReportCardPage />} />
+        <Route path="timetable" element={<StudentTimetablePage />} />
+      </Route>
+
+      {/* Parent shell - same pattern; the Overview's own child-selector is
+          for summary stats, the Report Cards page has its own (reusing
+          MyChildrenReportCards, which already handles multiple children). */}
       <Route
         path="/parent"
         element={
           <ProtectedRoute>
             <RoleRoute allow={["parent"]}>
-              <ParentDashboardPage />
+              <DashboardShell navItems={parentNavItems} roleLabel="Parent" />
             </RoleRoute>
           </ProtectedRoute>
         }
-      />
+      >
+        <Route index element={<ParentDashboardPage />} />
+        <Route path="report-card" element={<ParentReportCardPage />} />
+      </Route>
 
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="*" element={<Navigate to="/login" replace />} />

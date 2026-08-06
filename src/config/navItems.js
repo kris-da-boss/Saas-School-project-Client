@@ -9,6 +9,7 @@ import {
   FileCheck,
   Award,
   Megaphone,
+  CalendarClock,
 } from "lucide-react";
 
 export const adminNavItems = [
@@ -31,4 +32,16 @@ export const teacherNavItems = [
   { to: "/teacher/exams", label: "Exams", icon: FileCheck },
   { to: "/teacher/report-cards", label: "Report Cards", icon: Award },
   { to: "/teacher/announcements", label: "Announcements", icon: Megaphone },
+];
+
+export const studentNavItems = [
+  { to: "/student", label: "Overview", icon: LayoutGrid, end: true },
+  { to: "/student/assignments", label: "Assignments", icon: ClipboardList },
+  { to: "/student/report-card", label: "Report Card", icon: Award },
+  { to: "/student/timetable", label: "Timetable", icon: CalendarClock },
+];
+
+export const parentNavItems = [
+  { to: "/parent", label: "Overview", icon: LayoutGrid, end: true },
+  { to: "/parent/report-card", label: "Report Cards", icon: Award },
 ];

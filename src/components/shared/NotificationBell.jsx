@@ -12,6 +12,7 @@ export default function NotificationBell() {
   const [unreadCount, setUnreadCount] = useState(0);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [expandedId, setExpandedId] = useState(null); // which notification is showing its full message
   const panelRef = useRef(null);
 
   const fetchUnreadCount = useCallback(async () => {
@@ -45,6 +46,7 @@ export default function NotificationBell() {
 
   const openPanel = async () => {
     setOpen(true);
+    setExpandedId(null);
     setLoading(true);
     try {
       const { data } = await getMyAnnouncements();
@@ -54,7 +56,12 @@ export default function NotificationBell() {
     }
   };
 
+  // Tapping a notification expands it in place to show the full message
+  // (not just the truncated preview) and marks it read - both in one tap,
+  // since reading it IS the "I've seen this" signal.
   const handleItemClick = async (item) => {
+    setExpandedId((prev) => (prev === item.notificationId ? null : item.notificationId));
+
     if (!item.isRead) {
       await markAsRead(item.notificationId);
       setItems((prev) =>
@@ -86,7 +93,14 @@ export default function NotificationBell() {
       </button>
 
       {open && (
-        <div className="absolute right-0 z-50 mt-2 w-80 origin-top-right animate-fadeIn border border-rule bg-parchment shadow-lg">
+        // Below `sm`: a viewport-fixed overlay with side margins - this is
+        // deliberately NOT anchored to the button via `absolute`, because an
+        // absolutely-positioned panel is only ever as safe as its ancestors'
+        // layout. A `fixed` panel measured from the viewport itself can't be
+        // pushed off-screen by anything else on the page.
+        // At `sm` and up there's enough room to revert to a normal anchored
+        // dropdown under the bell.
+        <div className="fixed inset-x-4 top-16 z-50 origin-top animate-fadeIn border border-rule bg-parchment shadow-lg sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:mt-2 sm:w-80 sm:origin-top-right">
           <div className="flex items-center justify-between border-b border-rule px-4 py-3">
             <p className="text-xs uppercase tracking-[0.2em] text-brass">Announcements</p>
             {unreadCount > 0 && (
@@ -99,40 +113,51 @@ export default function NotificationBell() {
             )}
           </div>
 
-          <div className="max-h-80 overflow-y-auto">
+          <div className="max-h-[60vh] overflow-y-auto sm:max-h-80">
             {loading ? (
               <p className="px-4 py-6 text-center text-sm text-charcoal/50">Loading...</p>
             ) : items.length === 0 ? (
               <p className="px-4 py-6 text-center text-sm text-charcoal/50">No announcements yet.</p>
             ) : (
               <div className="divide-y divide-rule">
-                {items.map((item) => (
-                  <button
-                    key={item.notificationId}
-                    onClick={() => handleItemClick(item)}
-                    className={`block w-full px-4 py-3 text-left transition-colors hover:bg-ink/[0.03] ${
-                      item.isRead ? "" : "bg-brass/5"
-                    }`}
-                  >
-                    <div className="flex items-start gap-2">
-                      {!item.isRead && <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brass" />}
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-medium text-ink">
-                          {item.announcement.title}
-                        </p>
-                        <p className="mt-0.5 line-clamp-2 text-xs text-charcoal/60">
-                          {item.announcement.body}
-                        </p>
-                        <p className="mt-1 text-[10px] text-charcoal/40">
-                          {new Date(item.createdAt).toLocaleDateString(undefined, {
-                            month: "short",
-                            day: "numeric",
-                          })}
-                        </p>
+                {items.map((item) => {
+                  const isExpanded = expandedId === item.notificationId;
+                  return (
+                    <button
+                      key={item.notificationId}
+                      onClick={() => handleItemClick(item)}
+                      className={`block w-full px-4 py-3 text-left transition-colors hover:bg-ink/[0.03] ${
+                        item.isRead ? "" : "bg-brass/5"
+                      }`}
+                    >
+                      <div className="flex items-start gap-2">
+                        {!item.isRead && (
+                          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brass" />
+                        )}
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-medium text-ink">
+                            {item.announcement.title}
+                          </p>
+                          {/* Full text once expanded, truncated preview otherwise */}
+                          <p
+                            className={`mt-0.5 text-xs text-charcoal/60 ${
+                              isExpanded ? "whitespace-pre-line" : "line-clamp-2"
+                            }`}
+                          >
+                            {item.announcement.body}
+                          </p>
+                          <p className="mt-1 text-[10px] text-charcoal/40">
+                            {new Date(item.createdAt).toLocaleDateString(undefined, {
+                              month: "short",
+                              day: "numeric",
+                            })}
+                            {!isExpanded && " · tap to read more"}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </button>
-                ))}
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -141,3 +166,4 @@ export default function NotificationBell() {
     </div>
   );
 }
+

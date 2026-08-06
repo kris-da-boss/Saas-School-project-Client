@@ -2,7 +2,10 @@ import Button from "../../components/ui/Button";
 
 const DAY_ORDER = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
+// onEdit/onDelete are optional - omitting both renders a read-only view
+// (used for the student's own timetable, where there's nothing to edit).
 export default function TimetableView({ entries, onEdit, onDelete }) {
+  const editable = !!(onEdit || onDelete);
   const byDay = DAY_ORDER.map((day) => ({
     day,
     items: entries
@@ -32,14 +35,20 @@ export default function TimetableView({ entries, onEdit, onDelete }) {
                       {entry.teacherId ? entry.teacherId.fullName : "No teacher assigned"}
                     </p>
                   </div>
-                  <div className="flex shrink-0 gap-2">
-                    <Button size="sm" variant="ghost" onClick={() => onEdit(entry)}>
-                      Edit
-                    </Button>
-                    <Button size="sm" variant="dangerGhost" onClick={() => onDelete(entry._id)}>
-                      Remove
-                    </Button>
-                  </div>
+                  {editable && (
+                    <div className="flex shrink-0 gap-2">
+                      {onEdit && (
+                        <Button size="sm" variant="ghost" onClick={() => onEdit(entry)}>
+                          Edit
+                        </Button>
+                      )}
+                      {onDelete && (
+                        <Button size="sm" variant="dangerGhost" onClick={() => onDelete(entry._id)}>
+                          Remove
+                        </Button>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
