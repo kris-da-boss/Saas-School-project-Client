@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSlowLoading } from "../../hooks/useSlowLoading";
 import { Link } from "react-router-dom";
 import { getStudentOverview } from "../../api/dashboard.api";
 import StatCard from "../../components/shared/StatCard";
@@ -29,8 +30,9 @@ export default function StudentDashboardPage() {
     })();
   }, []);
 
+  const isSlow = useSlowLoading(loading);
   if (loading) {
-    return <div className="p-4 sm:p-6 md:p-10 text-sm text-charcoal/60">Loading overview...</div>;
+    return <div className="p-4 sm:p-6 md:p-10 text-sm text-charcoal/60">{isSlow ? "Still loading — the server may be waking up from being idle, this can take up to a minute." : "Loading overview..."}</div>;
   }
   if (error || !data) {
     return <div className="p-4 sm:p-6 md:p-10 text-sm text-red-700">{error || "No data available."}</div>;

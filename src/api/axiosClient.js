@@ -4,6 +4,11 @@ import axios from "axios";
 const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL, // e.g. https://your-render-url.onrender.com/api/v1
   withCredentials: true, // sends the httpOnly refreshToken cookie automatically
+  // Without this, a hung backend (crashed process, stuck DB connection,
+  // Render free-tier cold start gone wrong) spins the UI forever with zero
+  // feedback. 30s comfortably covers a normal cold start while still
+  // failing fast enough to show an actual error instead of an endless spinner.
+  timeout: 30000,
 });
 
 // In-memory access token. Deliberately NOT localStorage/sessionStorage —
