@@ -12,21 +12,28 @@ const actionLinkClasses =
 export default function StudentDashboardPage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     (async () => {
       setLoading(true);
+      setError("");
       try {
         const { data } = await getStudentOverview();
         setData(data.data);
+      } catch (err) {
+        setError(err.response?.data?.message || "Could not load the overview - try refreshing.");
       } finally {
         setLoading(false);
       }
     })();
   }, []);
 
-  if (loading || !data) {
+  if (loading) {
     return <div className="p-4 sm:p-6 md:p-10 text-sm text-charcoal/60">Loading overview...</div>;
+  }
+  if (error || !data) {
+    return <div className="p-4 sm:p-6 md:p-10 text-sm text-red-700">{error || "No data available."}</div>;
   }
 
   const { student, attendancePercentage, currentAverage, todaysLessons, upcomingExams, assignmentsDue, latestAnnouncements } =

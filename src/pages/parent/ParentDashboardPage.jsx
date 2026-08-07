@@ -9,13 +9,17 @@ export default function ParentDashboardPage() {
   const [data, setData] = useState(null);
   const [selectedChildId, setSelectedChildId] = useState("");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const fetchOverview = useCallback(async (childId) => {
     setLoading(true);
+    setError("");
     try {
       const { data } = await getParentOverview(childId);
       setData(data.data);
       if (data.data.selected) setSelectedChildId(data.data.selected.id);
+    } catch (err) {
+      setError(err.response?.data?.message || "Could not load the overview - try refreshing.");
     } finally {
       setLoading(false);
     }
@@ -31,8 +35,11 @@ export default function ParentDashboardPage() {
     fetchOverview(childId);
   };
 
-  if (loading || !data) {
+  if (loading) {
     return <div className="p-4 sm:p-6 md:p-10 text-sm text-charcoal/60">Loading overview...</div>;
+  }
+  if (error || !data) {
+    return <div className="p-4 sm:p-6 md:p-10 text-sm text-red-700">{error || "No data available."}</div>;
   }
 
   if (data.children.length === 0) {
