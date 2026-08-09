@@ -78,7 +78,7 @@ export default function Sidebar({ isOpen, onClose, navItems, roleLabel }) {
               change this string with each update so we can confirm from a
               screenshot whether the person is actually running the latest
               deployed code, without needing browser devtools access. */}
-          <p className="mt-3 text-[9px] text-parchment/20">build 2026-08-07-01</p>
+          <p className="mt-3 text-[9px] text-parchment/20">build 2026-08-07-02-authfix</p>
         </div>
       </aside>
     </>
