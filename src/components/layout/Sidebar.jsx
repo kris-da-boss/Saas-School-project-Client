@@ -74,6 +74,11 @@ export default function Sidebar({ isOpen, onClose, navItems, roleLabel }) {
             <LogOut size={14} strokeWidth={1.75} />
             Sign out
           </button>
+          {/* Temporary build marker for debugging deployment/cache issues -
+              change this string with each update so we can confirm from a
+              screenshot whether the person is actually running the latest
+              deployed code, without needing browser devtools access. */}
+          <p className="mt-3 text-[9px] text-parchment/20">build 2026-08-07-01</p>
         </div>
       </aside>
     </>
