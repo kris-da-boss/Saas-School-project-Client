@@ -10,14 +10,26 @@ const axiosClient = axios.create({
   timeout: 30000,
 });
 
-// In-memory access token. Deliberately NOT localStorage/sessionStorage —
-// keeping it in memory means a stolen XSS payload can't read it from storage,
-// and it naturally clears on tab close (the refresh cookie handles persistence).
-let accessToken = null;
+// Access token lives in sessionStorage, not a plain JS variable. A plain
+// variable is wiped on every page refresh (the whole JS bundle reloads),
+// which meant the ONLY way to restore a session after refresh was the
+// cross-domain refresh cookie - and that cookie is increasingly blocked by
+// browsers as a "third-party cookie" since the frontend (vercel.app) and
+// backend (onrender.com) are different domains. sessionStorage is
+// tab-scoped (cleared when the tab closes, unlike localStorage) and lets a
+// refresh restore the session directly, independent of cookie policy.
+let accessToken = sessionStorage.getItem("accessToken") || null;
 
 export const setAccessToken = (token) => {
   accessToken = token;
+  if (token) {
+    sessionStorage.setItem("accessToken", token);
+  } else {
+    sessionStorage.removeItem("accessToken");
+  }
 };
+
+export const getAccessToken = () => accessToken;
 
 axiosClient.interceptors.request.use((config) => {
   if (accessToken) {

@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, useRef } from "react";
 import { loginRequest, logoutRequest, refreshRequest, getMeRequest } from "../api/auth.api";
-import { setAccessToken } from "../api/axiosClient";
+import { setAccessToken, getAccessToken } from "../api/axiosClient";
 
 export const AuthContext = createContext(null);
 
@@ -9,19 +9,30 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true); // true until we've checked for an existing session
 
   // If the person manually logs in WHILE the background check below is
-  // still in flight (e.g. it's slow because the server is cold-starting),
-  // that background check must not be allowed to overwrite the fresh,
-  // successful login when it eventually resolves - that race is exactly
-  // what caused "stuck on Loading... forever after logging in".
+  // still in flight, that background check must not be allowed to
+  // overwrite the fresh, successful login when it eventually resolves.
   const manualLoginHappened = useRef(false);
 
-  // On first load, try a silent refresh — if the httpOnly cookie is still
-  // valid, this logs the user back in without them re-entering a password.
   useEffect(() => {
     (async () => {
       try {
+        const existingToken = getAccessToken();
+
+        if (existingToken) {
+          // Fast path: we already have a token, restored from
+          // sessionStorage in THIS tab. Just confirm it's still valid -
+          // no dependency on the cross-domain refresh cookie at all, which
+          // is what makes this work even when that cookie is blocked.
+          const me = await getMeRequest();
+          if (!manualLoginHappened.current) setUser(me.data.data);
+          return;
+        }
+
+        // No stored token (a brand new tab, or sessionStorage was cleared)
+        // - fall back to the refresh cookie. This still works whenever the
+        // browser actually allows the cookie through.
         const { data } = await refreshRequest();
-        if (manualLoginHappened.current) return; // a manual login already won the race
+        if (manualLoginHappened.current) return;
         setAccessToken(data.data.accessToken);
         const me = await getMeRequest();
         if (manualLoginHappened.current) return;
@@ -41,9 +52,6 @@ export function AuthProvider({ children }) {
     manualLoginHappened.current = true;
     setAccessToken(data.data.accessToken);
     setUser(data.data.user);
-    // Explicitly unblock ProtectedRoute here rather than waiting for the
-    // background check above to finish on its own - a successful manual
-    // login is definitive, it should never be stuck waiting on anything else.
     setLoading(false);
     return data.data.user;
   };
